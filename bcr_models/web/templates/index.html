@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<html>
+  <head>
+
+  <title>IgSf structure prediction</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap -->
+  <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="{{ url_for('static', filename='js/FileSaver.js') }}"></script>
+  <!-- Angular App -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/angular/angular.js') }}"></script>
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular-sanitize.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/app/app.js') }}"></script>
+
+  <style>
+    a {
+      cursor: pointer;
+    }
+
+    .alnpre {
+      background-color: transparent;
+      border: none;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  </style>
+  </head>
+{% raw %}
+<body ng-app="IgSf">
+
+<div class="container" ng-controller="MainCtrl">
+  <div class="page-header">
+    <h1>Welcome to IgSf</h1>
+  </div>
+
+  <h3 ng-click="showForm=!showForm">
+    <span class="glyphicon" ng-class="{'glyphicon-chevron-right': !showForm, 'glyphicon-chevron-down': showForm}"></span>
+    Submit data
+  </h3>
+
+  <div ng-show="showForm">
+    <form name="tcrForm" role="form">
+      <div class="form-group">
+        <textarea ng-model="alphaChain" id="alphaChain" class="form-control bg-primary" placeholder="Alpha chain.."></textarea><br>
+        <textarea ng-model="betaChain" id="betaChain" class="form-control" placeholder="Beta chain.."></textarea><br>
+
+
+        <button class="btn btn-success" ng-click="submitAuto()" ng-disabled="invalidChains()">Automatic template selection</button>
+        <button class="btn btn-primary" ng-click="submitManual()" disabled>Manual template selection</button>
+        <button class="btn btn-default pull-right" ng-click="loadExample()">Load Example Data</button>
+      </div>
+    </form>
+
+    <span id="helpBlock" class="help-block">{{ inputStatus }}</span>
+
+  <!-- end seq input -->
+  </div>
+
+
+  <div ng-show="JSON">
+    <h3 ng-click="showOutput=!showOutput">
+      <span class="glyphicon" ng-class="{'glyphicon-chevron-right': !showOutput, 'glyphicon-chevron-down': showOutput}"></span>
+      Output
+    </h3>
+
+    <div ng-show="showOutput">
+
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="list-group">
+            <a ng-click="outputActive='templates'" class="list-group-item" ng-class="{'active': outputActive=='templates'}">Templates and Alignment</a>
+            <a ng-click="outputActive='showStructure'" class="list-group-item" ng-class="{'active': outputActive=='showStructure'}">Show PDB Structure</a>
+            <a ng-click="outputActive='showPDB'" class="list-group-item" ng-class="{'active': outputActive=='showPDB'}">Show PDB File</a>
+          </div>
+          <div class="list-group">
+            <a href="#" ng-click="download();" class="list-group-item list-group-item-success">Download PDB File</a>
+          </div>
+        </div>
+
+        <div class="col-sm-9">
+
+          <div ng-show="outputActive=='templates'">
+            <h4> Templates </h4>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th ng-repeat="chain in JSON.templates.headers">{{ chain }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Framework</th>
+                  <td ng-repeat="fmw in JSON.templates.framework track by $index">{{ fmw }}</td>
+                </tr>
+                <tr ng-repeat="row in JSON.templates.cdrs">
+                  <th>Loop {{ $index + 1 }}</th>
+                  <td ng-repeat="col in row">{{ col }}</td>
+                </tr>
+                <tr ng-show="JSON.templates.packing">
+                  <th>Packing</th>
+                  <td colspan="2"> {{JSON.templates.packing}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+
+          </div>
+
+          <div ng-show="outputActive=='showStructure'">
+            JSMol
+          </div>
+
+          <div ng-show="outputActive=='showPDB'">
+            <pre>{{ JSON['pdb'] }}</pre>
+          </div>
+
+        </div>
+      </div>
+
+      <div ng-show="outputActive=='templates'">
+        <div ng-repeat="(chain, aln) in JSON.alignment">
+          <h4>{{ chain }} alignment</h4>
+          <pre class="alnpre" ng-bind-html="aln"></pre>
+        </div>
+      </div>
+
+    </div>
+  <!-- end show output -->
+  </div>
+
+<!-- end main .container -->
+</div>
+
+</body>
+</html>
+{% endraw %}

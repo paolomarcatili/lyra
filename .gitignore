@@ -1,0 +1,4 @@
+*.pyc
+bcr_models.egg-info
+*__pycache__*
+doc/build
