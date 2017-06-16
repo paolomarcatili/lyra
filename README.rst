@@ -23,6 +23,7 @@ BCR and TCR modelling tool
    you can install Lyra by using git and pip:
 
    git clone https://bitbucket.org/paolomarcatili/lyra_iedb/
+  
    pip install lyra_iedb/
 
    You can check your installation with
