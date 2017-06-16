@@ -15,18 +15,22 @@ BCR and TCR modelling tool
    
 1. Installation
 
-   [optional] It is higly adviced to use python virtual environment:
+   It is higly adviced to use python virtual environment:
    cd your_VE_folder
    virtualenv lyra
    source ./lyra/bin/activate
    
-   you can install Lyra by using pip on the uncompressed package:
+   you can install Lyra by using git and pip:
 
-   tar -xzvf lyra.tar.gz
-   pip install bcr_models
+   git clone https://bitbucket.org/paolomarcatili/lyra_iedb/
+   pip install lyra_iedb/
+
+   You can check your installation with
+   
+   lyra_model ./bcr_models/data/ex_kappa.fasta -o model.pdb
 
    It will install all the python required packages. To uninstall, use
-   pip uninstall bcr_models
+   pip uninstall lyra_iedb/
 
    2. Usage
       The package will install the executable lyra_model. This
