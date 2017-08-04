@@ -528,8 +528,8 @@ class IgComplex(object):
 
             for pdbname in self.blacklist:
                 newrmk('BLACKLIST {}'.format(pdbname))
+        print('\n'.join(remarks), file=outfile)
 
-            print('\n'.join(remarks), file=outfile)
 
 
 

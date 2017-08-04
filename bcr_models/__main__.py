@@ -54,6 +54,7 @@ def entry():
     parser.add_argument('-p', '--output-pymol', default=None,
         help='Output PyMol script')
     parser.add_argument('--no-scwrl', action='store_true', help='Do not use SCWRL4')
+    parser.add_argument('--blacklist', help='Comma-separated list of PDB structures not to be used as templates')
     parser.add_argument('--no-check', action='store_true', help='Do not perform structural check on the model')
     parser.add_argument('--verbose', action='store_true')
     parser.add_argument('-a','--noalign', action='store_true',help='Use the alignment provided by the user in the input file')
@@ -68,6 +69,12 @@ def entry():
 
     if args.debug:
         args.verbose = True
+    
+    blacklist=()
+    if args.blacklist:
+       args.blacklist.replace(" ","")
+       blacklist=args.blacklist.split(",")
+      
 
     logfmt = '%(asctime)s %(name)-12s: %(levelname)-8s %(message)s'
     if args.verbose:
@@ -126,7 +133,7 @@ def entry():
             for ig_chain in ig_complex:
                 log.debug('Realign {} with {}'.format(ig_chain.chain_type, ig_chain._hmm))
                 ig_chain.template_db.realign(ig_chain._hmm, ig_chain.chain_type)
-        ig_complex.find_templates()
+        ig_complex.find_templates(blacklist=blacklist)
         ig_complex.build_structure()
         if (not args.no_check):
            ig_complex.structure_check()
