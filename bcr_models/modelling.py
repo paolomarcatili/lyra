@@ -483,7 +483,7 @@ class IgComplex(object):
         remarks = [
             'REMARK     ',
             'REMARK     Output from LYRA: Lymphocyte Receptor Automated Modelling',
-            'REMARK     Made at Center for Biological Sequence Analysis (CBS),',
+            'REMARK     Made at the Department of Bio and Health Informatics,',
             'REMARK     Technical University of Denmark (DTU)',
             'REMARK     Version: {}'.format(igm.__version__),
         ]
@@ -522,6 +522,11 @@ class IgComplex(object):
                     chain.template_seq[start:end].replace('-', '')))
                 newrmk('LOOP {} INPUT SEQUENCE:    {}'.format(cdr,
                     chain.aligned_seq[start:end].replace('-', '')))
+                newrmk('LOOP {} TEMPLATE CS {}'.format(cdr, chain.templates[cdr][cdr]))
+                newrmk('LOOP {} PREDICTED TARGET CS {}'.format(cdr, chain.cs[cdr]))
+
+
+
 
             newrmk('PACKING TEMPLATE {} {}'.format(chain.chain_type,
                 chain.templates.get('packing')))
