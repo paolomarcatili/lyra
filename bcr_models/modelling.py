@@ -502,12 +502,23 @@ class IgComplex(object):
             stkseq = ['|' if a==t and a!='-' else ' ' for a, t in zip(alnseq, tplseq)]
             stkseq = ''.join(stkseq)
 
+
+            aln = igm.utils.hmmalign(chain._hmm, alnseq.replace('-', ''), trim=True)
+            aln = chain._gapalign(aln, insertions=chain._insertion_sites, align='l')
+            tpl = igm.utils.hmmalign(chain._hmm, tplseq.replace('-', ''), trim=True)
+            tpl = chain._gapalign(tpl, insertions=chain._insertion_sites, align='l')
+            stks = chain._get_aln_sticks(tpl, aln)
+
+
+
             n = 63
-            alnseqs = [alnseq[i:i+n] for i in range(0, len(alnseq), n)]
-            stkseqs = [stkseq[i:i+n] for i in range(0, len(stkseq), n)]
-            tplseqs = [tplseq[i:i+n] for i in range(0, len(tplseq), n)]
+            alnseqs = [aln[i:i+n] for i in range(0, len(alnseq), n)]
+            stkseqs = [stks[i:i+n] for i in range(0, len(stkseq), n)]
+            tplseqs = [tpl[i:i+n] for i in range(0, len(tplseq), n)]
 
             for alnseq, stkseq, tplseq in zip(alnseqs, stkseqs, tplseqs):
+
+                
                 newrmk('TPL {} {}'.format(chain.chain_type, tplseq))
                 newrmk('      {}' .format(stkseq))
                 newrmk('INP {} {}'.format(chain.chain_type, alnseq))

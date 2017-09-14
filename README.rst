@@ -28,7 +28,7 @@ BCR and TCR modelling tool
 
    You can check your installation with
    
-   lyra_model ./bcr_models/data/ex_kappa.fasta -o model.pdb
+   lyra_model ./lyra_iedb/bcr_models/data/ex_kappa.fasta -o model.pdb
 
    It will install all the python required packages. To uninstall, use
    pip uninstall lyra_iedb/
